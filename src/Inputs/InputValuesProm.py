@@ -1,31 +1,20 @@
 # General InputValues
-yaml = "Dagaut_HP.yaml"
+yaml = "PCRL-Mech1.yaml"
 
-
-#Propellent charictarization graph generaion options
-LongGraphs = False
-ShortGraphs = False
-
-#Tests
-EmittanceTest = True
-
-#is this method allowed to run
-Physical = False
 
 # Input numbers in the following section are in inches and degrees(expet the ratios they are ratios)
-ExpRatio = 8.4143
-ConRatio = 20.25
+ExpRatio = 3.291
+ConRatio = 9
 Dt = 1
-Rcont = 0.75
-ThetaCont = 35
+Rcont = 0.5
+ThetaCont = 45
 Rexp = 0.5
 ThetaExp = 15
-Lchamber = 5
+Lchamber = 3
 # End of input section for chamber and nozzle geometry
 
-# CEA Methods
-Method = 1  #Method of radius calculation (linear/parabolic, 1/2)
-cStarEff = 1
+# Method of radius calculation (linear/parabolic, 1/2)
+Method = 1
 # End of Method input
 
 # Number of cells in the 1D CEA
@@ -33,28 +22,28 @@ CellNum = 250
 # End of cells
 
 # Injector charataristics, Ox holes, fuel holes BLC holes
-FuelOrificeDiameter = 0.0400 #60
-FuelOrificeNum = 16
+FuelOrificeDiameter = 0.0550
+FuelOrificeNum = 8
 FuelOrificeCd = 0.7
 FuelAngle = 0  # NOT CURRENTLY USED
 
-OxOrificeDiameter = 0.0520 #55
-OxOrificeNum = 16
+OxOrificeDiameter = 0.0591
+OxOrificeNum = 8
 OxOrificeCd = 0.7
 OxAngle = 0  # NOT CURRENTLY USED
 
 BLCOrificeDiameter = 0.021 #0.0197
-BLCOrificeNum = 0
+BLCOrificeNum = 16 * 0.5
 BLCOrificeCd = 0.7
 BLCAngle = 45  # I was wrong this is used now
 # End of Injector pro
 
 # Tank charataristics
-FuelTankP = 625  # PSIs
+FuelTankP = 350  # PSI
 FuelTankT = 290  # K
-Fuel = "Kerosene"
+Fuel = "Ethanol"
 
-OxTankP = 625  # PSI
+OxTankP = 350  # PSI
 OxTankT = 85  # K
 Ox = "LOx"
 # End Of tank charataristics
@@ -74,10 +63,3 @@ Xlocation = 0 #location to compute x at.
 
 #true AbsCoefName
 AbsCoefName = mainName + str(CellNum) + '.npy'
-
-#Normal Pc Thrust driven solver inputs to determin chamber values.
-Dc = 4.5 #Arbitrary chamber diameter in inches
-Pc = 3500000 #Chamber pressure in pascal
-F = 2500 #engine thrust in newtons
-OF = 2.17 #OF ratio
-LStar = 60 #ideal Lstar in inches

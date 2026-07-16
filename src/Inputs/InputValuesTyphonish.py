@@ -6,16 +6,14 @@ yaml = "Dagaut_HP.yaml"
 LongGraphs = False
 ShortGraphs = False
 
-#Tests
-EmittanceTest = True
 
 #is this method allowed to run
-Physical = False
+Physical = True
 
 # Input numbers in the following section are in inches and degrees(expet the ratios they are ratios)
-ExpRatio = 8.4143
-ConRatio = 20.25
-Dt = 1
+ExpRatio = 5.85
+ConRatio = 14.0625
+Dt = 1.2
 Rcont = 0.75
 ThetaCont = 35
 Rexp = 0.5
@@ -33,12 +31,12 @@ CellNum = 250
 # End of cells
 
 # Injector charataristics, Ox holes, fuel holes BLC holes
-FuelOrificeDiameter = 0.0400 #60
+FuelOrificeDiameter = 0.0520
 FuelOrificeNum = 16
 FuelOrificeCd = 0.7
 FuelAngle = 0  # NOT CURRENTLY USED
 
-OxOrificeDiameter = 0.0520 #55
+OxOrificeDiameter = 0.0670
 OxOrificeNum = 16
 OxOrificeCd = 0.7
 OxAngle = 0  # NOT CURRENTLY USED
@@ -50,11 +48,11 @@ BLCAngle = 45  # I was wrong this is used now
 # End of Injector pro
 
 # Tank charataristics
-FuelTankP = 625  # PSIs
+FuelTankP = 750  # PSI
 FuelTankT = 290  # K
 Fuel = "Kerosene"
 
-OxTankP = 625  # PSI
+OxTankP = 750  # PSI
 OxTankT = 85  # K
 Ox = "LOx"
 # End Of tank charataristics
@@ -77,7 +75,7 @@ AbsCoefName = mainName + str(CellNum) + '.npy'
 
 #Normal Pc Thrust driven solver inputs to determin chamber values.
 Dc = 4.5 #Arbitrary chamber diameter in inches
-Pc = 3500000 #Chamber pressure in pascal
-F = 2500 #engine thrust in newtons
-OF = 2.17 #OF ratio
+Pc = 4200000 #Chamber pressure in pascal
+F = 5000 #engine thrust in newtons
+OF = 2.18 #OF ratio
 LStar = 60 #ideal Lstar in inches

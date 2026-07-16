@@ -1,10 +1,18 @@
+"""
+@author: phineas
+"""
+#Important imports
+#External Libraries
 import math as m
 import numpy as np
-from EngineGeometry import RatL, LT
-import InputValues as IV
-from Bisect import Bisect
-
 import matplotlib.pyplot as plt
+
+#Internal libraries
+from .EngineGeometry import RatL, LT
+from ..Inputs import InputValues as IV
+from .Bisect import Bisect
+
+
 
 #This fuiction gets the ray data from an arbitrary location across the engine in terms of cell number, and an arbitrary pair of angles measures from pointing at the top of the engine
 #the other directionality is irrelivent because the engine is symetric from any plane around the axis
@@ -152,7 +160,7 @@ def getPoint(t, point, slope, negQM):
     if((RootingTerm < 0) or (RootingTerm > RatL(0)**2+1)):
         return 10
 
-    #sSometimes the line will intersect on the same side of the engine so we need a positive and negetive version fo this math.
+    #sometimes the line will intersect on the same side of the engine so we need a positive and negetive version fo this math.
     ChamberZ =  m.sqrt(RootingTerm)
 
     #print("RT: " + str(RootingTerm))
@@ -204,7 +212,7 @@ if test:
     #testray = getRay(0, (10*(m.pi/180)), (20*(m.pi/180)))
     #testray = getRay(0, (85*(m.pi/180)), (20*(m.pi/180)))
     #testray = getRay(0, (-89.99999*(m.pi/180)), (0*(m.pi/180)))
-    #testray = getRay(0, (75*(m.pi/180)), (0*(m.pi/180)), True)
+    #testray = getRay(0, (0*(m.pi/180)), (0*(m.pi/180)), True)
     #testray = getRay(245, (85*(m.pi/180)), (85*(m.pi/180)), True)
     #testray = getRay(0, (89*(m.pi/180)), (0*(m.pi/180)), True)
     #print(testray)

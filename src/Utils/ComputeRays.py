@@ -34,7 +34,7 @@ else:
     AbsCoefAray = np.load(IV.AbsCoefName, allow_pickle=True)
 length = len(AbsCoefAray[0][0])
 
-#returnes the integrated value for one rat t
+#returnes the integrated value for one ray t
 def CompRay(x, theta1, theta2):
     x = int(x)
     #print("test: " + str([x, theta1, theta2]))

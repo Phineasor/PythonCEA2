@@ -1,10 +1,11 @@
-# Right now this is incredibally simplue, just uses the SPI model, wont work for all props work for now though
+# Right now this is incredibally simple, just uses the SPI model, wont work for all props work for now though
 """
 @author: phineas
 """
 
 import CoolProp.CoolProp as CP
 import math
+from ..Helpers.PropName import conCool, conCant
 
 in2meter = 0.0254
 PSI2PA = 6894.76
@@ -12,7 +13,8 @@ PSI2PA = 6894.76
 
 def MdotSPIONLY(Cd, D, prop, TProp, PChamber, PTank):
     A = math.pi * 0.25 * ((D * in2meter) ** 2)
-    rho0 = CP.PropsSI("D", "T", TProp, "Q", 0, prop)
+    #rho0 = CP.PropsSI("D", "T", TProp, "Q", 0, conCool(prop))
+    rho0 = CP.PropsSI("D", "T", TProp, "P", PChamber, conCool(prop))
     Mdot = Cd * A * ((2 * rho0 * ((PTank * PSI2PA) - PChamber)) ** 0.5)
     return Mdot
 
