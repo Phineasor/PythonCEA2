@@ -77,10 +77,11 @@ def getEmittanceAtRay(x1, theta1, theta2, gas):
     tao = T/1000
     lamw = m.log10(pLw) #not too sure if this is ln or not
     lamc = m.log10(pLc)
+
     
     #not we must apply the polynomial equations the coefficients are given, these coefficients are all listed as arrays here
     waterCs1 = [[-2.2118, -1.1987, 0.035596],
-                [0.085667, 0.93048, -0.14391],
+                [0.85667, 0.93048, -0.14391],
                 [-0.10838, -0.17156, 0.045915]]
     
     CO2Cs1 = [[-3.9893, 2.7669, -2.1081, 0.39163],
@@ -96,7 +97,7 @@ def getEmittanceAtRay(x1, theta1, theta2, gas):
               [0.90786, 0.086726, 0.13797, -0.035144],
               [-0.15563, -0.10292, 0.06443, -0.014128]]
     
-    CO2Cs4 = [[-3.0380, 0.087994, 0.44952, -0.63679, 0.14030],
+    CO2Cs4 = [[-3.0380, 0.087994, 0.44952, -0.62679, 0.14030],
               [1.1288, -1.0822, 1.5792, -0.74749, 0.12207],
               [-0.25513, 0.045499, -0.22845, 0.16615, -0.034597],
               [0.036827, 0.040937, 0.018056, -0.031075, 0.0076346]]
@@ -104,12 +105,12 @@ def getEmittanceAtRay(x1, theta1, theta2, gas):
     #we must pick which one of these that we should use, this is then used to determine M and N
     #The N and M values are determined in the emissivity function where they are called for use
     waterC = waterCs1
-    CO2C   = CO2Cs4
+    CO2C   = CO2Cs3
     
     #we must now recursivly compute the natural log of the non pressure correlated emissivity values this will happen in a subfunction
     Emissivity0w = m.exp(lnEmissivity0func(waterC, tao, lamw))
     Emissivity0c = m.exp(lnEmissivity0func(CO2C, tao, lamc))
-
+    print(str(tao) + ", " + str(lamc))
     
     
     #Now we must compute the pressure correction correlation ep/e0
@@ -166,17 +167,19 @@ def lnEmissivity0func(Carr, tao, lam):
     #computes the polynomial equations needed for emissivity0
     
     #M and N values for the given coefficient arrays
-    M   = len(Carr)-1
-    N   = len(Carr[0])-1
+    M   = len(Carr)   
+    N   = len(Carr[0])
     
     lnEmissivity0 = 0
     for i in range(M):
+        #print("i: " + str(i))
         #the first thing that we need is the a value
         a = 0
         for j in  range(N):
+            #print("j: " + str(j))
             a += Carr[i][j]*(tao**j) #this should compute the a coefficient
         #now this must get used to compute lnE
-        lnEmissivity0 += a*lam**i
+        lnEmissivity0 += a*(lam**i)
     return lnEmissivity0
     
 #determines the cartesian distance between two 3 points
