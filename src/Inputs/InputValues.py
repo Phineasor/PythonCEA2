@@ -10,7 +10,7 @@ ShortGraphs = False
 EmittanceTest = True
 
 #is this method allowed to run
-Physical = False
+Physical = True
 
 # Input numbers in the following section are in inches and degrees(expet the ratios they are ratios)
 ExpRatio = 8.4143
