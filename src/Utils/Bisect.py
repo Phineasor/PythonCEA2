@@ -23,7 +23,6 @@ def Bisect(f, x1, x2, tol, *args):
 
 #this function gets the derivative of some other arbitrary function with respect to the first variable int the arbitarry function
 #uses the standard trivial center difference method
-dx = 10**(-5)
-def Derivative(x, f, *args):
+def Derivative(x, f, dx, *args):
     D = (f(x+dx, *args)-f(x-dx, *args))/(2*dx)
     return D

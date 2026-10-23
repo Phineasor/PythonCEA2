@@ -6,6 +6,8 @@ yaml = "Dagaut_HP.yaml"
 LongGraphs = False
 ShortGraphs = False
 
+#Tests
+EmittanceTest = True
 
 #is this method allowed to run
 Physical = True

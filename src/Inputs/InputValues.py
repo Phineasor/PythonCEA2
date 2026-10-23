@@ -1,6 +1,6 @@
 # General InputValues
-yaml = "Dagaut_HP.yaml"
-
+yaml = "SanDiego_hydrogen.yaml"
+CC = 20
 
 #Propellent charictarization graph generaion options
 LongGraphs = False
@@ -10,7 +10,7 @@ ShortGraphs = False
 EmittanceTest = True
 
 #is this method allowed to run
-Physical = False
+Physical = True
 
 # Input numbers in the following section are in inches and degrees(expet the ratios they are ratios)
 ExpRatio = 8.4143
@@ -51,8 +51,8 @@ BLCAngle = 45  # I was wrong this is used now
 
 # Tank charataristics
 FuelTankP = 625  # PSIs
-FuelTankT = 290  # K
-Fuel = "Kerosene"
+FuelTankT = 20  # K
+Fuel = "LH2"
 
 OxTankP = 625  # PSI
 OxTankT = 85  # K

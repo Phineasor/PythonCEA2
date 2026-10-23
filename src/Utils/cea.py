@@ -8,6 +8,7 @@ import math as m
 import numpy as np
 import CoolProp.CoolProp as CP
 import cantera as ct
+from scipy.optimize import *
 
 #Internal modules
 from .EngineGeometry import RatL, Dt, LT, Lt
@@ -21,33 +22,35 @@ psi2pa = 6894.71 #Psi to pascals
 
 def runCEA():
     #Starting conditions for iteration
-    Pc = IV.AmbP 
-    Tc = IV.AmbT
-    Tol = 10 ** (-4)
-    RelError = 1
-    Damp = 0.6
+    Pc: float = IV.AmbP 
+    Tc: float = IV.AmbT
+    Tol: float = 10 ** (-4)
+    RelError: float = 1
+    Damp: float = 0.5
 
+
+    Mdot: float = 0
     #Creates CombustionGas
     CombustionGas = ct.Solution(IV.yaml)
     #print(CombustionGas.report())
 
     i = 0
-    while (RelError > Tol) & (i < 250):
+    while (RelError > Tol) and (i < 250):
         i += 1  # This is here to ensure no infinite loops
-        PcOld = Pc #Keeps track of old Pc to find reletive error
-        TcOld = Tc #Keeps track of old Tc to find reletive error
+        PcOld: float = Pc #Keeps track of old Pc to find reletive error
+        TcOld: float = Tc #Keeps track of old Tc to find reletive error
 
 
         # Gets Mdot for Both fuel and Ox sides all orifices, also total Mdot,
-        FuelMdot = IV.FuelOrificeNum * Inj.MdotSPIONLY( IV.FuelOrificeCd, IV.FuelOrificeDiameter, IV.Fuel, IV.FuelTankT, Pc, IV.FuelTankP)
-        BLCMdot = IV.BLCOrificeNum * Inj.MdotSPIONLY( IV.BLCOrificeCd, IV.BLCOrificeDiameter, IV.Fuel, IV.FuelTankT, Pc, IV.FuelTankP)
-        OxMdot = IV.OxOrificeNum * Inj.MdotSPIONLY(IV.OxOrificeCd, IV.OxOrificeDiameter, IV.Ox, IV.OxTankT, Pc, IV.OxTankP)
+        FuelMdot: float = IV.FuelOrificeNum * Inj.MdotSPIONLY( IV.FuelOrificeCd, IV.FuelOrificeDiameter, IV.Fuel, IV.FuelTankT, Pc, IV.FuelTankP)
+        BLCMdot: float = IV.BLCOrificeNum * Inj.MdotSPIONLY( IV.BLCOrificeCd, IV.BLCOrificeDiameter, IV.Fuel, IV.FuelTankT, Pc, IV.FuelTankP)
+        OxMdot: float = IV.OxOrificeNum * Inj.MdotSPIONLY(IV.OxOrificeCd, IV.OxOrificeDiameter, IV.Ox, IV.OxTankT, Pc, IV.OxTankP)
         Mdot = FuelMdot+OxMdot+BLCMdot
         #print(FuelMdot)
         #print(OxMdot)
         
         #Calculates OF ratio, technically not efficient to have it here or caculated this way, but eh.
-        OF = OxMdot / FuelMdot
+        OF: float = OxMdot / FuelMdot
 
         #get the combustion gases at the current chamber pressure and OF ratio
         CombustionGas = equalibrateHPWrapper(Pc, OF, 10**(-4))
@@ -71,6 +74,9 @@ def runCEA():
     #print(CombustionGas.P)
     #print(OF)
     return CombustionGas, Mdot
+
+
+
 
 
 
@@ -108,8 +114,8 @@ def equalibrateHPWrapper(Pc, OF, tol):
 
     #If we are assuming that we want to do HP constant combustion here, we would need to set this in a gas, however that may not work
     #So what we will do is try varous temperatures untill one of them gives us the desired enthalpy with a bisect method on a function shown below
-    Treaction = Bisect(equalibrateHP, 10, 5000, tol, EnthalpyTarget, Pc, OF)
-    
+    Treaction = root_scalar(equalibrateHP, bracket=(10, 5000) , args=(EnthalpyTarget, Pc, OF), xtol=tol, method="brentq").root
+
     #now that we have the known temperature that produces our desired enthalpy we can construct our gas
     CombustionGas = ct.Solution(IV.yaml)
     CombustionGas.TPY = Treaction, Pc, conCant(IV.Fuel, IV.Ox, OF)
@@ -134,7 +140,7 @@ def equalibrateHP(T, H, Pc, OF):
 #this function takes in baisc charictaristics and outputs engine geometris and such
 def basicEngineChar(Pc, Pe, OF, F):
     #Produces the needed combustion gas for finding out engine charictaristics
-    CombustionGas = equalibrateHPWrapper(Pc, OF, 10**(-5))
+    CombustionGas = equalibrateHPWrapper(Pc, OF, 10**(-4))
     
     #We we get the 
     y = CombustionGas.cp/CombustionGas.cv
@@ -168,7 +174,7 @@ def basicEngineChar(Pc, Pe, OF, F):
     Uc = mdot/(Ac*CombustionGas.density)
     Mc = Uc/m.sqrt(y*R*Tc)
     P0 = Pc/((1+((y+1)/2)*Mc**2)**(-y/(y-1))) #Stagnation pressure
-    
+       
     #We need mach number at the exit, so we must determine the temperature at exit
     T0 = Tc/((1+((y+1)/2)*Mc**2)**(-1))
     
@@ -186,7 +192,7 @@ def basicEngineChar(Pc, Pe, OF, F):
     Ae = At*ExpR
     
     #Return All of the desirec rocket engine values in a list
-    return [cStar, CF, mdot, At, ExpR, Ae]
+    return [cStar, CF, mdot, At, ExpR, Ae, Tc]
 
 
 
